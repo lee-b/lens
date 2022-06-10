@@ -21,9 +21,6 @@ import type { ClusterStore } from "../common/cluster-store/cluster-store";
 import type { Cluster } from "../common/cluster/cluster";
 import userStoreInjectable from "../common/user-store/user-store.injectable";
 import type { UserStore } from "../common/user-store";
-import isMacInjectable from "../common/vars/is-mac.injectable";
-import isWindowsInjectable from "../common/vars/is-windows.injectable";
-import isLinuxInjectable from "../common/vars/is-linux.injectable";
 import getAbsolutePathInjectable from "../common/path/get-absolute-path.injectable";
 import { getAbsolutePathFake } from "../common/test-utils/get-absolute-path-fake";
 import joinPathsInjectable from "../common/path/join-paths.injectable";
@@ -45,6 +42,7 @@ import appVersionInjectable from "../common/get-configuration-file-model/app-ver
 import provideInitialValuesForSyncBoxesInjectable from "./utils/sync-box/provide-initial-values-for-sync-boxes.injectable";
 import requestAnimationFrameInjectable from "./components/animate/request-animation-frame.injectable";
 import getRandomIdInjectable from "../common/utils/get-random-id.injectable";
+import platformInjectable from "../common/vars/platform.injectable";
 
 export const getDiForUnitTesting = (opts: { doGeneralOverrides?: boolean } = {}) => {
   const {
@@ -68,9 +66,7 @@ export const getDiForUnitTesting = (opts: { doGeneralOverrides?: boolean } = {})
 
   if (doGeneralOverrides) {
     di.override(getRandomIdInjectable, () => () => "some-irrelevant-random-id");
-    di.override(isMacInjectable, () => true);
-    di.override(isWindowsInjectable, () => false);
-    di.override(isLinuxInjectable, () => false);
+    di.override(platformInjectable, () => "darwin");
 
     di.override(terminalSpawningPoolInjectable, () => document.createElement("div"));
     di.override(hostedClusterIdInjectable, () => undefined);
