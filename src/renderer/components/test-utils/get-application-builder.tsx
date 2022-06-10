@@ -24,12 +24,12 @@ import type { ClusterStore } from "../../../common/cluster-store/cluster-store";
 import mainExtensionsInjectable from "../../../extensions/main-extensions.injectable";
 import currentRouteComponentInjectable from "../../routes/current-route-component.injectable";
 import { pipeline } from "@ogre-tools/fp";
-import { flatMap, compact, join, get, filter, map, matches, find } from "lodash/fp";
+import { compact, filter, find, flatMap, get, join, map, matches } from "lodash/fp";
 import preferenceNavigationItemsInjectable from "../+preferences/preferences-navigation/preference-navigation-items.injectable";
 import navigateToPreferencesInjectable from "../../../common/front-end-routing/routes/preferences/navigate-to-preferences.injectable";
 import type { MenuItemOpts } from "../../../main/menu/application-menu-items.injectable";
 import applicationMenuItemsInjectable from "../../../main/menu/application-menu-items.injectable";
-import type { MenuItemConstructorOptions, MenuItem } from "electron";
+import type { MenuItem, MenuItemConstructorOptions } from "electron";
 import storesAndApisCanBeCreatedInjectable from "../../stores-apis-can-be-created.injectable";
 import navigateToHelmChartsInjectable from "../../../common/front-end-routing/routes/cluster/helm/charts/navigate-to-helm-charts.injectable";
 import hostedClusterInjectable from "../../../common/cluster-store/hosted-cluster.injectable";
@@ -52,6 +52,7 @@ import { getDiForUnitTesting as getMainDi } from "../../../main/getDiForUnitTest
 import { overrideChannels } from "../../../test-utils/channel-fakes/override-channels";
 import type { TrayMenuItem } from "../../../main/tray/tray-menu-item/tray-menu-item-injection-token";
 import trayIconPathsInjectable from "../../../main/tray/tray-icon-path.injectable";
+import lensProxyPortInjectable from "../../../main/lens-proxy/lens-proxy-port.injectable";
 
 type Callback = (dis: DiContainers) => void | Promise<void>;
 
@@ -385,6 +386,8 @@ export const getApplicationBuilder = () => {
     },
 
     async render() {
+      mainDi.inject(lensProxyPortInjectable).set(42);
+
       for (const callback of beforeApplicationStartCallbacks) {
         await callback(dis);
       }
